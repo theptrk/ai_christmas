@@ -1,6 +1,20 @@
+const nunjucks = require("nunjucks");
+const path = require("path");
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
+
+// app.use(express.static(__dirname + "public"));
+app.use("/static", express.static(path.join(__dirname, "public")));
+
+// nunjucks.configure("views", {
+//   autoescape: true,
+//   express: app,
+// });
+nunjucks.configure("views", {
+  autoescape: true,
+  express: app,
+});
 
 // https://www.twilio.com/blog/working-with-environment-variables-in-node-js-html
 if (process.env.NODE_ENV !== "production") {
@@ -56,7 +70,8 @@ app.get("/", async (req, res) => {
   const { uuid } = await createWavFile(speech, voice);
   setTimeout(async () => {
     const wave = await getWavFile(uuid);
-    res.send(wave);
+    // res.send(wave);
+    res.render("index.html", wave);
   }, 2000);
 });
 
