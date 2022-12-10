@@ -19,6 +19,10 @@ if (process.env.NODE_ENV !== "production") {
 let UBERDUCK_KEY = process.env.UBERDUCK_KEY;
 let UBERDUCK_SECRET = process.env.UBERDUCK_SECRET;
 
+if (UBERDUCK_KEY === undefined || UBERDUCK_SECRET === undefined) {
+  console.log("UBERDUCK_KEY or UBERDUCK_SECRET is undefined");
+}
+
 async function fetchier(url, data) {
   let method = data ? "POST" : "GET";
   let response = await fetch(url, {
@@ -59,15 +63,24 @@ async function getWavFile(uuid) {
 }
 
 app.get("/", async (req, res) => {
-  let speech = "I dont want a lot for Christmas";
-  let voice = "miss-piggy";
+  res.render("index.html");
+});
 
-  const { uuid } = await createWavFile(speech, voice);
+async function getWavFileUntilFinished(res, uuid) {
   setTimeout(async () => {
     const wave = await getWavFile(uuid);
-    // res.send(wave);
-    res.render("index.html", wave);
-  }, 2000);
+    if (wave.finished_at === null) {
+      return getWavFileUntilFinished(res);
+    }
+    return res.send(wave);
+  }, 1000);
+}
+
+app.get("/create_wav", async (req, res) => {
+  let speech = "I dont want a lot for Christmas";
+  let voice = "miss-piggy";
+  const { uuid } = await createWavFile(speech, voice);
+  return getWavFileUntilFinished(res, uuid);
 });
 
 app.listen(port, () => {
