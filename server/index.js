@@ -109,10 +109,15 @@ async function getOpenAISong(songSubject) {
   return top_choice_html;
 }
 
+let prompt_responses = {};
 app.get("/openai", async (req, res) => {
   const subject = req.query.s || "kale";
+  if (prompt_responses[subject]) {
+    return res.send({ song: prompt_responses[subject] });
+  }
   const song = await getOpenAISong(subject);
-  return res.send(song);
+  prompt_responses[subject] = song;
+  return res.send({ song });
 });
 
 app.get("/create_wav", async (req, res) => {
