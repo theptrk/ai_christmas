@@ -132,10 +132,13 @@ app.get("/openai", async (req, res) => {
   const song = await getOpenAISong(subject);
   prompt_responses[subject] = song;
 
-  let speech = song.split("<br />").join(" ");
+  let speech = song;
+  speech = speech.replaceAll("<br />", " ");
+  speech = speech.replaceAll("<span>", " ");
+  speech = speech.replaceAll("</span>", " ");
+
   const { uuid } = await createWavFile(speech, voice);
   let wav = await getWavFileUntilFinished(uuid);
-
   res.send({ song, wav });
 });
 
