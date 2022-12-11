@@ -19,6 +19,7 @@ if (process.env.NODE_ENV !== "production") {
 let UBERDUCK_KEY = process.env.UBERDUCK_KEY;
 let UBERDUCK_SECRET = process.env.UBERDUCK_SECRET;
 let OPENAI_KEY = process.env.OPENAI_KEY;
+let COHERE_KEY = process.env.COHERE_KEY;
 
 if (
   UBERDUCK_KEY === undefined ||
@@ -44,6 +45,9 @@ async function fetchier(type, url, data) {
       Buffer.from(`${UBERDUCK_KEY}:${UBERDUCK_SECRET}`).toString("base64");
   } else if (type === "openai") {
     headers.Authorization = `Bearer ${OPENAI_KEY}`;
+  } else if (type === "cohere") {
+    headers["Cohere-Version"] = "2021-11-08";
+    headers.Authorization = `Bearer ${COHERE_KEY}`;
   } else {
     console.log("fetchier() type must be 'uberduck', 'openai' or undefined");
   }
@@ -78,8 +82,30 @@ async function getWavFile(uuid) {
   return fetchier("uberduck", url);
 }
 
+async function getCohereSummary(song) {
+  let url = `https://api.cohere.ai/generate`;
+  let data = {
+    model: "xlarge",
+    prompt: song,
+    max_tokens: 100,
+    temperature: 0.8,
+    k: 0,
+    p: 0.75,
+  };
+  return fetchier("cohere", url, data);
+}
+
 app.get("/", async (req, res) => {
   res.render("index.html");
+});
+
+app.get("/cohere", async (req, res) => {
+  const subject = req.query.s || "kale";
+  const voice = req.query.v || "spongebob";
+  let bts = await getCohereSummary(
+    `${voice}, what inspired you to write this song about ${subject}?`
+  );
+  res.send({ text: bts?.generations[0]?.text });
 });
 
 async function getWavFileUntilFinished(uuid) {
