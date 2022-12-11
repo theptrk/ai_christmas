@@ -127,10 +127,12 @@ app.get("/openai", async (req, res) => {
   const subject = req.query.s || "kale";
   const voice = req.query.v || "spongebob";
   if (prompt_responses[subject]) {
-    return res.send({ song: prompt_responses[subject] });
+    // return res.send({ song: prompt_responses[subject] });
+    return res.send(prompt_responses[subject]);
   }
   const song = await getOpenAISong(subject);
-  prompt_responses[subject] = song;
+  prompt_responses[subject] = {};
+  prompt_responses[subject]["song"] = song;
 
   let speech = song;
   speech = speech.replaceAll("<br />", " ");
@@ -139,6 +141,7 @@ app.get("/openai", async (req, res) => {
 
   const { uuid } = await createWavFile(speech, voice);
   let wav = await getWavFileUntilFinished(uuid);
+  prompt_responses[subject]["wav"] = wav;
   res.send({ song, wav });
 });
 
