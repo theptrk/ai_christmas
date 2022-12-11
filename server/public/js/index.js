@@ -18,7 +18,7 @@ document
 
     setTimeout(() => {
       document.getElementById("christmas_song_container").innerHTML =
-        `<h3>${songSubject}</h3>` + song;
+        `<h3>Christmas Song: ${songSubject}</h3>` + song;
       document.getElementById("song_audio").src = wav.path;
       document.getElementById(
         "song_title"

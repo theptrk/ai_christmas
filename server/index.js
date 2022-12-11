@@ -110,7 +110,11 @@ async function getOpenAISong(songSubject) {
     data
   );
   let top_choice = res.choices[0].text;
-  let top_choice_html = top_choice.split("\n").slice(2).join("<br />");
+  let top_choice_html = top_choice
+    .split("\n")
+    .slice(2)
+    .map((x) => `<span>${x}</span>`)
+    .join("<br />");
   return top_choice_html;
 }
 
