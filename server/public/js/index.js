@@ -18,10 +18,10 @@ document
 
     setTimeout(() => {
       document.getElementById("christmas_song_container").innerHTML =
-        `<h3>Christmas Song: ${songSubject}</h3>` + song;
+        `<h3>Christmas Song: ${songSubject}</h3>` + song + "<br /> - OpenAI";
       document.getElementById("song_audio").src = wav.path;
       document.getElementById(
         "song_title"
-      ).innerHTML = `Christmas Song: ${songSubject} - sung by ${voice}`;
+      ).innerHTML = `Christmas Song: ${songSubject} - sung by ${voice} with uberduck`;
     }, 700);
   });
