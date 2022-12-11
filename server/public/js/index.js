@@ -22,6 +22,6 @@ document
       document.getElementById("song_audio").src = wav.path;
       document.getElementById(
         "song_title"
-      ).innerHTML = `${songSubject} - sung by ${voice}`;
+      ).innerHTML = `Christmas Song: ${songSubject} - sung by ${voice}`;
     }, 700);
   });
