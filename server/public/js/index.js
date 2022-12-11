@@ -11,6 +11,7 @@ document
     let { song } = await res.json();
 
     setTimeout(() => {
-      document.getElementById("christmas_song_container").innerHTML = song;
+      document.getElementById("christmas_song_container").innerHTML =
+        `<h3>${songSubject}</h3>` + song;
     }, 700);
   });
