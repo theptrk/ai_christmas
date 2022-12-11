@@ -105,7 +105,14 @@ app.get("/cohere", async (req, res) => {
   let bts = await getCohereSummary(
     `${voice}, what inspired you to write this song about ${subject}?`
   );
-  res.send({ text: bts?.generations[0]?.text });
+  if (bts && bts.generations && bts.generations[0] && bts.generations[0].text) {
+    res.send({ text: bts?.generations[0]?.text });
+  } else {
+    res.send({
+      text:
+        "Why did you write this song? I simply love " + subject + " (backup)",
+    });
+  }
 });
 
 async function getWavFileUntilFinished(uuid) {
