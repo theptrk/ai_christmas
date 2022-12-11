@@ -1,5 +1,5 @@
 var audio = document.getElementById("mariah_background");
-audio.volume = 0.4;
+audio.volume = 0.2;
 
 document
   .getElementById("form_id")
