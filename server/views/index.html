@@ -11,22 +11,32 @@
   <body>
     <img src="static/images/santa.png" height="200px" width="200px">
     <form id="form_id">
-        <label for="song">Write a Christmas song about...</label><br>
-        <input type="text" id="song_subject" placeholder="whatever you want!"><br><br>
-        <input type="submit" value="Generate song" id="submit">
+        <label for="song">Write a Christmas song about...</label><br/>
+        <input type="text" id="song_subject" placeholder="whatever you want!"><br>
+        <label for="voice">Voice</label>
+        <select name="voice" id="voice" style="margin-top:3px">
+          <option value="spongebob" selected>SpongeBob</option>
+          <option value="peter-griffin">Peter Griffin</option>
+          <option value="drake">Drake</option>
+          <option value="lara-croft">Lara Croft</option>
+        </select>
+        <br/>
+        <input type="submit" value="Generate song" id="submit" style="margin-top:3px">
     </form>
-    <div id="christmas_song_container"></div>
-    <div>
-      Mariah Carey - All I Want For Christmas Is You (instrumental)<br/>
-      <img src="static/images/mariah_carey.png" height="100px" width="100px">
-      <!-- <audio controls autoplay loop>
-        <source src="https://todidlist-oregon.s3.us-west-2.amazonaws.com/mariah_carey_all_I_want_for_christmas_is_you_instrumental" type="audio/mpeg">
-      Your browser does not support the audio element.
-      </audio> -->
+    <div style="margin-top:10px">
+      <strong>Mariah Carey - All I Want For Christmas Is You (instrumental)</strong><br/>
+      <small>Play in the background</small><br/>
+      <img src="static/images/mariah_carey.png" height="65px" width="65px">
       <audio
         controls loop
-        src="https://todidlist-oregon.s3.us-west-2.amazonaws.com/mariah_carey_all_I_want_for_christmas_is_you_instrumental">
+        src="https://todidlist-oregon.s3.us-west-2.amazonaws.com/mariah_carey_all_I_want_for_christmas_is_you_instrumental"
+        id="mariah_background">
       </audio>
+    </div>
+    <div id="christmas_song_container"></div>
+    <div id="song_audio_container" style="margin-top: 15px;">
+      <strong id="song_title">Your song will be loaded here</strong><br/>
+      <audio controls id="song_audio" src=""></audio>
     </div>
     <script src="static/js/index.js"></script>
   </body>

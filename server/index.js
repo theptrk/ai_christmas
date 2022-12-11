@@ -78,14 +78,19 @@ app.get("/", async (req, res) => {
   res.render("index.html");
 });
 
-async function getWavFileUntilFinished(res, uuid) {
-  setTimeout(async () => {
-    const wave = await getWavFile(uuid);
-    if (wave.finished_at === null) {
-      return getWavFileUntilFinished(res);
+async function getWavFileUntilFinished(uuid) {
+  return new Promise(async (resolve, reject) => {
+    async function go() {
+      setTimeout(async () => {
+        const wave = await getWavFile(uuid);
+        if (wave.finished_at === null) {
+          return go();
+        }
+        resolve(wave);
+      }, 1000);
     }
-    return res.send(wave);
-  }, 1000);
+    go();
+  });
 }
 
 async function getOpenAISong(songSubject) {
@@ -112,19 +117,26 @@ async function getOpenAISong(songSubject) {
 let prompt_responses = {};
 app.get("/openai", async (req, res) => {
   const subject = req.query.s || "kale";
+  const voice = req.query.v || "spongebob";
   if (prompt_responses[subject]) {
     return res.send({ song: prompt_responses[subject] });
   }
   const song = await getOpenAISong(subject);
   prompt_responses[subject] = song;
-  return res.send({ song });
+
+  let speech = song.split("<br />").join(" ");
+  const { uuid } = await createWavFile(speech, voice);
+  let wav = await getWavFileUntilFinished(uuid);
+
+  res.send({ song, wav });
 });
 
 app.get("/create_wav", async (req, res) => {
   let speech = "I dont want a lot for Christmas";
   let voice = "miss-piggy";
   const { uuid } = await createWavFile(speech, voice);
-  return getWavFileUntilFinished(res, uuid);
+  const wave = await getWavFileUntilFinished(uuid);
+  return res.send(wave);
 });
 
 app.listen(port, () => {
