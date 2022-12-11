@@ -31,8 +31,7 @@ document
       );
       let { text } = await res.json();
       text = text.split("\n").slice(1).join("<br />");
-      text =
-        "<strong>Behind the scenes interview from cohere</strong><br/>" + text;
+      text = `<strong>Behind the scenes interview from cohere</strong><br/>${text}`;
       document.getElementById("bts").innerHTML = text;
     }, 700);
   });
