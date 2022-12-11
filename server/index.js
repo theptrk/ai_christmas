@@ -20,8 +20,12 @@ let UBERDUCK_KEY = process.env.UBERDUCK_KEY;
 let UBERDUCK_SECRET = process.env.UBERDUCK_SECRET;
 let OPENAI_KEY = process.env.OPENAI_KEY;
 
-if (UBERDUCK_KEY === undefined || UBERDUCK_SECRET === undefined) {
-  console.log("UBERDUCK_KEY or UBERDUCK_SECRET is undefined");
+if (
+  UBERDUCK_KEY === undefined ||
+  UBERDUCK_SECRET === undefined ||
+  OPENAI_KEY === undefined
+) {
+  console.log("UBERDUCK_KEY or UBERDUCK_SECRET or OPENAI_KEY is undefined");
 }
 
 async function fetchier(type, url, data) {
